@@ -1,0 +1,98 @@
+﻿@model Spice.Models.ViewModels.IndexViewModel
+
+<br />
+
+@*This checks if there is a coupon in the daabase*@
+@if (Model.Coupon.ToList().Count > 0)
+{
+    <div class="border">
+        @*coupons are changing every 2.5s*@
+        <div class="carousel" data-ride="carousel" data-interval="2500">
+            @*Iterating through each of the items in the model*@
+            @for (int i = 0; i < Model.Coupon.Count(); i++)
+            {
+                //if its only one coupon in the database we use the active class
+                if (i == 0)
+                {
+
+                    //We need to mark one item as active that is why we are using the for loop
+                    <div class="carousel-item active">
+                        @*converting the image stream in the database to images*@
+                        @{
+                            var base64 = Convert.ToBase64String(Model.Coupon.ToList()[i].Picture);
+                            var imgsrc = string.Format("data:image/jpg;base64,{0}", base64);
+                        }
+
+                        <img src="@imgsrc" height="50px" class="d-block w-100" />
+                    </div>
+                }
+                else
+                {
+                    //if coupon is more than one in the database, we don't use the active class
+                    <div class="carousel-item">
+                        @{
+                            var base64 = Convert.ToBase64String(Model.Coupon.ToList()[i].Picture);
+                            var imgsrc = string.Format("data:image/jpg;base64,{0}", base64);
+                        }
+
+                        <img src="@imgsrc" height="50px" class="d-block w-100" />
+                    </div>
+                }
+            }
+        </div>
+    </div>
+
+}
+
+<br /><br />
+
+<div class="backgroundWhite container">
+    @*This is the menu list displaying the category*@
+    <ul id="menu-filters" class="menu-filter-list list-inline text-center">
+        <li class="active btn btn-secondary ml-1 mr-1" data-filter=".menu-restaurant">Show All</li>
+
+        @foreach (var item in Model.Category)
+        {
+            <li class="ml-1 mr-1" data-filter=".@item.Name.Replace(" ",string.Empty)">@item.Name</li>
+        }
+    </ul>
+
+    @*This is used to display the menu item in the database according to their category*@
+    @foreach (var category in Model.Category)
+    {
+        <div class="row" id="menu-wrapper">
+            <partial name="_ThumbnailAreaPartial" model="@Model.MenuItem.Where(u=>u.Category.Name.Equals(category.Name))" />
+        </div>
+    }
+</div>
+
+@section Scripts{
+    @*Adding Jquery to the page*@
+    <script src="https://code.jquery.com/jquery-3.3.1.js"
+            integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+            crossorigin="anonymous"></script>
+    @*Assigning a variable to retrieve the post class in the Thumbnail Partial*@
+    <script>var posts = $('.post');
+
+    (function ($) {
+        //Any time the Li inside ul containing this Id is clicked
+        $("#menu-filters li").click(function () {
+            $("#menu-filters li").removeClass('active btn btn-secondary');
+            $(this).addClass('active btn btn-secondary');
+
+            //retrieve the category that the user selected
+            var selectedFilter = $(this).data("filter");
+
+            //fade out the menu-restaurant
+            $(".menu-restaurant").fadeOut();
+
+            //set a timer
+            setTimeout(function () {
+                $(selectedFilter).slideDown();
+            }, 300);
+        });
+
+
+
+    })(jQuery);</script>
+}

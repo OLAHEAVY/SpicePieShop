@@ -1,0 +1,108 @@
+﻿@*We are not returnng anything to the view from the controller*@
+@model Spice.Models.ViewModels.MenuItemViewModel
+
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<br />
+<h2 class="text-info">Details Menu-Item</h2>
+<br />
+
+<form asp-action="Details">
+    <div class="border backgroundWhite  row">
+        <div class="col-8">
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="MenuItem.Name" class="col-form-label"></label>
+                </div>
+                <div class="col-8">
+                    <input asp-for="MenuItem.Name" readonly class="form-control" />
+                </div>
+
+            </div>
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="MenuItem.Description" class="col-form-label"></label>
+                </div>
+                <div class="col-8">
+                    <textarea asp-for="MenuItem.Description" readonly:1></textarea>
+                </div>
+
+            </div>
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="MenuItem.Price" class="col-form-label"></label>
+                </div>
+                <div class="col-8">
+                    <input asp-for="MenuItem.Price" readonly class="form-control" />
+                </div>
+
+            </div>
+
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="MenuItem.Category.Name" class="col-form-label"></label>
+                </div>
+                <div class="col-8">
+                    <input asp-for="MenuItem.Category.Name" readonly id="CategoryId" class="form-control" />
+                </div>
+
+            </div>
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="MenuItem.SubCategory.Name" class="col-form-label"></label>
+                </div>
+                <div class="col-8">
+                    <input asp-for="MenuItem.SubCategory.Name" readonly class="form-control" />
+                </div>
+
+            </div>
+            <div class="form-group row">
+                <div class="col-4">
+                    <label asp-for="MenuItem.Spicyness" readonly class="col-form-label"></label>
+                </div>
+                <div class="col-8">
+                    <select asp-for="MenuItem.Spicyness" readonly asp-items="Html.GetEnumSelectList<MenuItem.Espicy>()" class="form-control"></select>
+                </div>
+
+            </div>
+
+        </div>
+        <div class="col-3 offset-1">
+            <img src="@Model.MenuItem.Image" alt="MenuItem Image" width="250" style="border-radius:5px;border:1px solid #bbb9b9;" />
+        </div>
+
+
+
+        <div class="col-8">
+            <div class="col-8 offset-4">
+                @*This is a partial view*@
+                <partial Name="_DetailsAndBackToListPartial" model="Model.MenuItem.Id" />
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+
+
+
+</form>
+
+@section Scripts{
+    <script>
+        tinymce.init({
+            selector: 'textarea',
+            plugins: "lists",
+            toolbar: "undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist",
+            menubar: 'file edit format',
+            readonly: 1
+        });</script>
+    <script>tinymce.init({ selector: 'textarea' });</script>
+
+}

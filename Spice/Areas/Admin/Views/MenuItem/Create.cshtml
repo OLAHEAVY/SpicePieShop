@@ -1,0 +1,134 @@
+﻿@*We are not returnng anything to the view from the controller*@
+@model Spice.Models.ViewModels.MenuItemViewModel
+@using  Spice.Extensions
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<br />
+<h2 class="text-info">Create Menu-Item</h2>
+<br />
+
+<form asp-action="Create" method="post" enctype="multipart/form-data">
+    <div class="border backgroundWhite">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-group row">
+            <div class="col-2">
+                <label asp-for="MenuItem.Name" class="col-form-label"></label>
+            </div>
+            <div class="col-5">
+                <input asp-for="MenuItem.Name" class="form-control" />
+            </div>
+            <span asp-validation-for="MenuItem.Name" class="text-danger"></span>
+        </div>
+        <div class="form-group row">
+            <div class="col-2">
+                <label asp-for="MenuItem.Description" class="col-form-label"></label>
+            </div>
+            <div class="col-5">
+                @Html.TextAreaFor(m => m.MenuItem.Description)
+            </div>
+            <span asp-validation-for="MenuItem.Description" class="text-danger"></span>
+        </div>
+        <div class="form-group row">
+            <div class="col-2">
+                <label asp-for="MenuItem.Price" class="col-form-label"></label>
+            </div>
+            <div class="col-5">
+                <input asp-for="MenuItem.Price" class="form-control" />
+            </div>
+            <span asp-validation-for="MenuItem.Price" class="text-danger"></span>
+        </div>
+        <div class="form-group row">
+            <div class="col-2">
+                <label asp-for="MenuItem.Image" class="col-form-label"></label>
+            </div>
+            <div class="col-5">
+                <input type="file" name="files" multiple class="form-control" />
+            </div>
+
+        </div>
+        <div class="form-group row">
+            <div class="col-2">
+                <label asp-for="MenuItem.Category" class="col-form-label"></label>
+            </div>
+            <div class="col-5">
+                <select asp-for="@Model.MenuItem.CategoryId" id="CategoryId" class="form-control" asp-items="Model.Category.ToSelectListItem(Model.MenuItem.CategoryId)"></select>
+            </div>
+
+        </div>
+        <div class="form-group row">
+            <div class="col-2">
+                <label asp-for="MenuItem.SubCategory" class="col-form-label"></label>
+            </div>
+            <div class="col-5">
+                <select asp-for="@Model.MenuItem.SubCategory" id="SubCategoryId" name="SubCategoryId" class="form-control" asp-items="@(new SelectList(string.Empty,"Id","Name"))"></select>
+            </div>
+
+        </div>
+        <div class="form-group row">
+            <div class="col-2">
+                <label asp-for="MenuItem.Spicyness" class="col-form-label"></label>
+            </div>
+            <div class="col-5">
+                <select asp-for="MenuItem.Spicyness" class="form-control" asp-items="Html.GetEnumSelectList<MenuItem.Espicy>()"></select>
+            </div>
+
+        </div>
+
+        <div class="form-group row">
+            <div class="col-5 offset-2">
+                @*This is a partial view*@
+                <partial Name="_CreateAndBackToListPartial" />
+            </div>
+
+        </div>
+
+    </div>
+
+</form>
+
+@section Scripts{
+    <script>
+        tinymce.init({
+            selector: 'textarea',
+            plugins: 'lists',
+            menubar:'file edit format'
+        });
+    </script>
+        @*This is the javascript method to automatically load Subcategories from the database with aa change in the category.*@
+    <script type="text/javascript">
+        $(document).ready(function () {
+            getSubCategory();
+            $('#CategoryId').change(function () {
+                getSubCategory();
+
+            });
+        });
+
+        function getSubCategory() {
+            //This is the url of the action of the getSubcategory list
+            var url = '@Url.Content("~/")' + "Admin/SubCategory/GetSubCategory";
+
+            //This is the Id assigend to the category
+            var ddlsource = '#CategoryId';
+
+            //We are using the getJson method to get the Json data of subcategory  through the category Id
+            $.getJSON(url, { id: $(ddlsource).val() }, function (data) {
+                //So we need to empty the items and Subcategory list
+                var items = '';
+                $('#SubCategoryId').empty();
+                $.each(data, function (i, subcategory) {
+                    items += "<option value='" + subcategory.value + "'>" + subcategory.text + "</option>"
+                });
+
+                $('#SubCategoryId').html(items);
+            })
+        }
+    </script>
+
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+

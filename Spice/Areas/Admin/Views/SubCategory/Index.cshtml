@@ -1,0 +1,70 @@
+﻿@*Ienumerable is being used beacause we are getting a list from the database*@
+@model  IEnumerable<SubCategory>
+
+    @{
+        ViewData["Title"] = "Index";
+        Layout = "~/Views/Shared/_Layout.cshtml";
+    }
+
+    <br /><br />
+    <div class="border backgroundWhite">
+        <div class="row">
+            <div class="col-6">
+
+                <h2 class="text-info">Sub-Category List</h2>
+
+            </div>
+
+            <div class="col-6 text-right">
+                @*This is a partial view*@
+                <partial name="_CreateButtonPartial" />
+            </div>
+
+        </div>
+        <br />
+        <div>
+            @*The if statement is checking if there is any row in the column SubCategory and also including rows in the category column*@
+
+            @if (Model.Count() > 0)
+            {
+                <table class="table table-striped border">
+                    @*Displaying the name of the row using Html Tag Helpers*@
+                    <tr class="table-secondary">
+                        <th>
+                            @Html.DisplayNameFor(m => m.Name)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(m => m.Category.Name)
+                        </th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+
+                    @*Using foreach to loop through the data in the database*@
+                    @foreach (var item in Model)
+                    {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(m => item.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(m => item.Category.Name)
+                    </td>
+                    <td>
+                        <partial name="_TableButtonPartial" model="item.Id" />
+                    </td>
+                </tr>
+                    }
+                </table>
+            }
+            @*If there is no list of subcategory nothing will be displayed*@
+            else
+            {
+                <p>No Sub-Category exists</p>
+            }
+        </div>
+
+    </div>
+
+
+
