@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Spice.Models
 {
+    //creating an Application user model that extends from identity
     public class ApplicationUser :IdentityUser
     {
        

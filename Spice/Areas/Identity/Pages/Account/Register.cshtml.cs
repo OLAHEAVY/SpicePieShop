@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using Serilog;
 using Spice.Models;
 using Spice.Utility;
 
@@ -21,6 +22,7 @@ namespace Spice.Areas.Identity.Pages.Account
         private readonly UserManager<IdentityUser> _userManager;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+
         //You need to add dependent injection for Role Manager
         private readonly RoleManager<IdentityRole> _roleManager;
 
@@ -83,6 +85,9 @@ namespace Spice.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
+            //This is to fetch the role of the user in the register form
+            string role = Request.Form["rdUserRole"].ToString();
+
             returnUrl = returnUrl ?? Url.Content("~/");
             if (ModelState.IsValid)
             {
@@ -119,9 +124,23 @@ namespace Spice.Areas.Identity.Pages.Account
                         await _roleManager.CreateAsync(new IdentityRole(SD.CustomerEndUser));
                     }
                     //assigning a role to the user
+
+                    if(role == SD.KitchenUser)
+                    {
+                        await _userManager.AddToRoleAsync(user, SD.KitchenUser);
+                    }
+                    else
+                    {
+                        if (role == SD.FrontDeskUser)
+                        {
+                            await _userManager.AddToRoleAsync(user, SD.KitchenUser);
+                        }
+                    }
                     await _userManager.AddToRoleAsync(user, SD.ManagerUser);
 
-                    _logger.LogInformation("User created a new account with password.");
+                    Log.Information("{Name} created a new account with email {Email} and role {Role}", user.Name, user.Email);
+
+                    // _logger.LogInformation("User created a new account with password.");
 
                     //var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     //var callbackUrl = Url.Page(
