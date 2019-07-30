@@ -36,7 +36,8 @@ namespace Spice.Areas.Identity.Pages.Account
             }
             else
             {
-                return Page();
+                //fix the microsoft bug of logout page.....
+                return RedirectToPage("Logout");
             }
         }
     }

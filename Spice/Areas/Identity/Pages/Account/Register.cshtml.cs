@@ -135,12 +135,31 @@ namespace Spice.Areas.Identity.Pages.Account
                         {
                             await _userManager.AddToRoleAsync(user, SD.KitchenUser);
                         }
+                    
+                        else
+                        {
+                            if (role == SD.ManagerUser)
+                            {
+                                await _userManager.AddToRoleAsync(user, SD.ManagerUser);
+                            }
+                            else
+                            {
+                                //Only customers will be able to sign immedately after registering
+                                await _userManager.AddToRoleAsync(user, SD.CustomerEndUser);
+                                await _signInManager.SignInAsync(user, isPersistent: false);
+                                //redirecting the customer to the Homeoage after registering
+                                return LocalRedirect(returnUrl);
+                            }
+                        }
+                        Log.Information("{Name} created a new account with email {Email}", user.Name, user.Email);
+                        _logger.LogInformation("User created a new account with password.");
                     }
-                    await _userManager.AddToRoleAsync(user, SD.ManagerUser);
+                    //redirecting the manager to the list of users
+                    return RedirectToAction("Index", "User", new { area = "Admin" });
 
-                    Log.Information("{Name} created a new account with email {Email} and role {Role}", user.Name, user.Email);
+                  
 
-                    // _logger.LogInformation("User created a new account with password.");
+                   
 
                     //var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     //var callbackUrl = Url.Page(
@@ -152,8 +171,8 @@ namespace Spice.Areas.Identity.Pages.Account
                     //await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
                     //    $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
 
-                    await _signInManager.SignInAsync(user, isPersistent: false);
-                    return LocalRedirect(returnUrl);
+                   
+                  
                 }
                 foreach (var error in result.Errors)
                 {

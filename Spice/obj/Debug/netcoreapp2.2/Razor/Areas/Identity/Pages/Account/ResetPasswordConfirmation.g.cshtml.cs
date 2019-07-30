@@ -13,13 +13,13 @@ namespace Spice.Areas.Identity.Pages.Account
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Rendering;
     using Microsoft.AspNetCore.Mvc.ViewFeatures;
-#line 2 "C:\Users\Olasunkanmi\Documents\DIG\Spice\Spice\Areas\Identity\Pages\_ViewImports.cshtml"
-using Spice.Areas.Identity;
+#line 1 "C:\Users\Olasunkanmi\Documents\DIG\Spice\Spice\Areas\Identity\Pages\_ViewImports.cshtml"
+using Microsoft.AspNetCore.Identity;
 
 #line default
 #line hidden
-#line 3 "C:\Users\Olasunkanmi\Documents\DIG\Spice\Spice\Areas\Identity\Pages\_ViewImports.cshtml"
-using Microsoft.AspNetCore.Identity;
+#line 2 "C:\Users\Olasunkanmi\Documents\DIG\Spice\Spice\Areas\Identity\Pages\_ViewImports.cshtml"
+using Spice.Areas.Identity;
 
 #line default
 #line hidden
@@ -29,7 +29,7 @@ using Spice.Areas.Identity.Pages.Account;
 #line default
 #line hidden
     [global::Microsoft.AspNetCore.Razor.Hosting.RazorSourceChecksumAttribute(@"SHA1", @"9fa2ad01473fa832304d2166b6c6d5536eb62725", @"/Areas/Identity/Pages/Account/ResetPasswordConfirmation.cshtml")]
-    [global::Microsoft.AspNetCore.Razor.Hosting.RazorSourceChecksumAttribute(@"SHA1", @"b4aed9c03317be4310009402ece0c4826064fee9", @"/Areas/Identity/Pages/_ViewImports.cshtml")]
+    [global::Microsoft.AspNetCore.Razor.Hosting.RazorSourceChecksumAttribute(@"SHA1", @"21ffeee4f72f7e5d5ec7e7918a9bdd60713b4b1b", @"/Areas/Identity/Pages/_ViewImports.cshtml")]
     [global::Microsoft.AspNetCore.Razor.Hosting.RazorSourceChecksumAttribute(@"SHA1", @"c36342480ea515e3932f175c1cbddb32b279f3c1", @"/Areas/Identity/Pages/Account/_ViewImports.cshtml")]
     public class Areas_Identity_Pages_Account_ResetPasswordConfirmation : global::Microsoft.AspNetCore.Mvc.RazorPages.Page
     {
